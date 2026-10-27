@@ -44,3 +44,21 @@ class Chat:
         message = Message(sender, text)
         self.messages.append(message)
         return message
+
+# мессенджер хранит пользователей и чаты
+class Messenger:
+    def __init__(self):
+        self.users = []
+        self.chats = []
+
+    # регистрирует нового пользователя
+    def register_user(self, name):
+        user = User(name)
+        self.users.append(user)
+        return user
+
+    # создаёт новый чат
+    def create_chat(self, name):
+        chat = Chat(name)
+        self.chats.append(chat)
+        return chat
