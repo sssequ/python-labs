@@ -45,6 +45,20 @@ class Chat:
         self.messages.append(message)
         return message
 
+# групповой чат с названием и описанием
+class GroupChat(Chat):
+    def __init__(self, name, description=""):
+        super().__init__(name)
+        self.description = description
+
+    # изменяет название группы
+    def rename(self, new_name):
+        self.name = new_name
+
+    # изменяет описание группы
+    def change_description(self, description):
+        self.description = description
+
 # мессенджер хранит пользователей и чаты
 class Messenger:
     def __init__(self):
