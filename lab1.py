@@ -1,6 +1,14 @@
 # пользователь мессенджера
 class User:
     def __init__(self, name):
+        # проверяет тип имени
+        if not isinstance(name, str):
+            raise TypeError("имя пользователя должно быть строкой")
+
+        # разрешает только латинские буквы без пробелов
+        if not name.isascii() or not name.isalpha():
+            raise ValueError("имя должно содержать только английские буквы")
+
         self.name = name
         self.is_online = False
 
@@ -15,12 +23,23 @@ class User:
 # сообщение в мессенджере
 class Message:
     def __init__(self, sender, text):
+        if not isinstance(sender, User):
+            raise TypeError("отправитель должен быть пользователем")
+
         self.sender = sender
-        self.text = text
         self.is_read = False
+
+        # использует общую проверку текста при создании и редактировании
+        self.edit(text)
 
     # изменяет текст сообщения
     def edit(self, new_text):
+        if not isinstance(new_text, str):
+            raise TypeError("текст сообщения должен быть строкой")
+
+        if not new_text.strip():
+            raise ValueError("сообщение не должно быть пустым")
+
         self.text = new_text
 
     # отмечает сообщение как прочитанное
@@ -36,11 +55,17 @@ class Chat:
 
     # добавляет пользователя в чат
     def add_user(self, user):
+        if not isinstance(user, User):
+            raise TypeError("участник чата должен быть пользователем")
+
         if user not in self.users:
             self.users.append(user)
 
-    # создаёт сообщение и добавляет его в чат
+    # отправляет сообщение от участника чата
     def send_message(self, sender, text):
+        if sender not in self.users:
+            raise PermissionError("отправитель не состоит в чате")
+
         message = Message(sender, text)
         self.messages.append(message)
         return message
@@ -65,9 +90,14 @@ class Messenger:
         self.users = []
         self.chats = []
 
-    # регистрирует нового пользователя
+    # регистрирует пользователя с уникальным именем
     def register_user(self, name):
         user = User(name)
+
+        for existing_user in self.users:
+            if existing_user.name.lower() == user.name.lower():
+                raise ValueError("это имя пользователя уже занято")
+
         self.users.append(user)
         return user
 
