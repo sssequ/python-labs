@@ -26,3 +26,21 @@ class Message:
     # отмечает сообщение как прочитанное
     def mark_as_read(self):
         self.is_read = True
+
+# чат мессенджера
+class Chat:
+    def __init__(self, name):
+        self.name = name
+        self.users = []
+        self.messages = []
+
+    # добавляет пользователя в чат
+    def add_user(self, user):
+        if user not in self.users:
+            self.users.append(user)
+
+    # создаёт сообщение и добавляет его в чат
+    def send_message(self, sender, text):
+        message = Message(sender, text)
+        self.messages.append(message)
+        return message
